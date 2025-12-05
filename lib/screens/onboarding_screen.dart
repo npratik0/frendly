@@ -62,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       "Skip",
                       style: TextStyle(
                         color: Colors.black87,
-                        fontSize: isTablet ? 20 : 16,
+                        fontSize: isTablet ? 24 : 20,
                       ),
                     ),
                   ),
@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         // Emoji / Image
                         Text(
                           onboardingData[i]["emoji"]!,
-                          style: TextStyle(fontSize: isTablet ? 140 : 90),
+                          style: TextStyle(fontSize: isTablet ? 140 : 100),
                         ),
 
                         SizedBox(height: isTablet ? 40 : 20),
@@ -93,7 +93,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           onboardingData[i]["title"]!,
                           textAlign: TextAlign.center,
                           style: AppStyles.screenTitle.copyWith(
-                            fontSize: isTablet ? 34 : 26,
+                            fontSize: isTablet ? 34 : 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -109,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             onboardingData[i]["desc"]!,
                             textAlign: TextAlign.center,
                             style: AppStyles.subtitle.copyWith(
-                              fontSize: isTablet ? 20 : 16,
+                              fontSize: isTablet ? 24 : 18,
                               color: Colors.black54,
                             ),
                           ),
@@ -172,7 +172,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ? "Get Started"
                           : "Next",
                       style: TextStyle(
-                        fontSize: isTablet ? 22 : 18,
+                        fontSize: isTablet ? 28 : 22,
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
