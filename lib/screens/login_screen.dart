@@ -34,8 +34,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 10),
 
               // LOGO
-              const Text("Frendly", style: AppStyles.logoTitle),
-              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.center,
+                child: const Text("Frendly", style: AppStyles.logoTitle),
+              ),
+              const SizedBox(height: 50),
 
               // TITLE
               const Text("LOGIN", style: AppStyles.screenTitle),
@@ -44,14 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 32),
 
-              /// ---------------- FORM ----------------
+              // Form
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Form(
                   key: _form,
                   child: Column(
                     children: [
-                      /// EMAIL FIELD
+                      // EMAIL FIELD
                       CustomTextField(
                         controller: _email,
                         hint: "Email",
@@ -89,9 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 26),
+              const SizedBox(height: 30),
 
-              /// --------------- SIGN IN BUTTON (FULL WIDTH) ---------------
+              // Signin Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -118,33 +121,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 25),
 
-              /// ---------------- CREATE NEW ACCOUNT ----------------
+              // Create new account
               TextButton(
                 onPressed: () => Navigator.pushNamed(context, '/register'),
                 child: const Text(
                   "Create new account",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
 
               const SizedBox(height: 20),
 
-              /// ---------------- DIVIDER ----------------
               const DividerWithText(text: "Or continue with"),
 
               const SizedBox(height: 18),
 
-              /// ---------------- SOCIAL MEDIA LOGIN ----------------
+              // Google login button
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SocialButton(label: "G", onTap: () {}),
-                  const SizedBox(width: 12),
-                  SocialButton(icon: Icons.facebook, onTap: () {}),
-                  const SizedBox(width: 12),
-                  SocialButton(icon: Icons.apple, onTap: () {}),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Image.asset(
+                      'assets/images/google_logo.jpg',
+                      height: 30,
+                      width: 30,
+                    ),
+                    label: const Text(
+                      "Login with Google",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white, // Google button background
+                      foregroundColor: Colors.black, // Text color
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                        ), // subtle border
+                      ),
+                      elevation: 5,
+                    ),
+                  ),
                 ],
               ),
             ],
