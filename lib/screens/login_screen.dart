@@ -18,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _pw = TextEditingController();
 
   bool _obscure = true;
-  // bool _loading = false;
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,6 @@ import '../theme/app_styles.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/password_field.dart';
-import '../widgets/social_button.dart';
 import '../widgets/divider_with_text.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -56,6 +55,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (date != null) setState(() => _dob = date);
   }
+
+  final List<Map<String, String>> countryCodes = [
+    {"name": "Nepal", "code": "+977"},
+    {"name": "India", "code": "+91"},
+    {"name": "USA", "code": "+1"},
+    {"name": "UK", "code": "+44"},
+    {"name": "Australia", "code": "+61"},
+    {"name": "Canada", "code": "+1"},
+  ];
+
+  String selectedCountry = "Nepal";
+  String selectedCode = "+977";
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +139,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 18),
 
                     /// PHONE
-                    CustomTextField(
-                      controller: _phone,
-                      hint: "Phone Number",
-                      validator: (v) =>
-                          v!.isEmpty ? "Enter phone number" : null,
+                    // CustomTextField(
+                    //   controller: _phone,
+                    //   hint: "Phone Number",
+                    //   validator: (v) =>
+                    //       v!.isEmpty ? "Enter phone number" : null,
+                    // ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade400),
+                      ),
+                      child: Row(
+                        children: [
+                          /// COUNTRY DROPDOWN
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedCountry,
+                              icon: const Icon(Icons.arrow_drop_down),
+                              items: countryCodes.map((c) {
+                                return DropdownMenuItem(
+                                  value: c["name"],
+                                  child: Row(children: [Text(c["name"]!)]),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedCountry = value!;
+                                  selectedCode = countryCodes.firstWhere(
+                                    (c) => c["name"] == value,
+                                  )["code"]!;
+                                });
+                              },
+                            ),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          /// COUNTRY CODE TEXT
+                          Text(
+                            selectedCode,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          /// PHONE NUMBER INPUT
+                          Expanded(
+                            child: TextFormField(
+                              controller: _phone,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                hintText: "Phone Number",
+                                border: InputBorder.none,
+                              ),
+                              validator: (v) =>
+                                  v!.isEmpty ? "Enter phone number" : null,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 18),
 
@@ -326,8 +399,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white, // Google button background
-                      foregroundColor: Colors.black, // Text color
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
