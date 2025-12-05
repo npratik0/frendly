@@ -3,8 +3,6 @@ import '../theme/app_styles.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/password_field.dart';
-import '../widgets/primary_button.dart';
-import '../widgets/social_button.dart';
 import '../widgets/divider_with_text.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _pw = TextEditingController();
 
   bool _obscure = true;
-  bool _loading = false;
+  // bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
