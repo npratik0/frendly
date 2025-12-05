@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 15), () {
       Navigator.pushReplacementNamed(context, '/onboarding');
     });
   }
@@ -26,20 +26,20 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 48,
-              backgroundColor: AppColors.lightBlue,
-              child: Text(
-                'F',
-                style: TextStyle(
-                  fontSize: 44,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text('Frendly', style: AppStyles.logoTitle),
+            // CircleAvatar(
+            //   radius: 48,
+            //   backgroundColor: AppColors.lightBlue,
+            //   child: Text(
+            //     'F',
+            //     style: TextStyle(
+            //       fontSize: 44,
+            //       fontWeight: FontWeight.bold,
+            //       color: AppColors.primary,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 12),
+            Text('Frendly', style: AppStyles.logoTitle.copyWith(fontSize: 36)),
           ],
         ),
       ),
