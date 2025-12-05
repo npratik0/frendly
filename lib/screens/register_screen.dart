@@ -186,11 +186,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       hint: const Text("Country"),
                       value: _country,
-                      items: ["Nepal", "India", "USA", "UK", "Australia"]
-                          .map(
-                            (c) => DropdownMenuItem(value: c, child: Text(c)),
-                          )
-                          .toList(),
+                      items:
+                          ["Nepal", "India", "USA", "UK", "Australia", "Canada"]
+                              .map(
+                                (c) =>
+                                    DropdownMenuItem(value: c, child: Text(c)),
+                              )
+                              .toList(),
                       onChanged: (v) => setState(() => _country = v),
                       validator: (v) => v == null ? "Select country" : null,
                     ),
@@ -309,11 +311,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SocialButton(label: "G", onTap: () {}),
-                  const SizedBox(width: 12),
-                  SocialButton(icon: Icons.facebook, onTap: () {}),
-                  const SizedBox(width: 12),
-                  SocialButton(icon: Icons.apple, onTap: () {}),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Image.asset(
+                      'assets/images/google_logo.jpg',
+                      height: 30,
+                      width: 30,
+                    ),
+                    label: const Text(
+                      "Login with Google",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white, // Google button background
+                      foregroundColor: Colors.black, // Text color
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                        ), // subtle border
+                      ),
+                      elevation: 5,
+                    ),
+                  ),
                 ],
               ),
             ],
