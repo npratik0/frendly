@@ -28,7 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _agree = false;
 
   String? _gender;
-  String? _country;
   DateTime? _dob;
 
   List<String> interests = [];
@@ -138,13 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 18),
 
-                    /// PHONE
-                    // CustomTextField(
-                    //   controller: _phone,
-                    //   hint: "Phone Number",
-                    //   validator: (v) =>
-                    //       v!.isEmpty ? "Enter phone number" : null,
-                    // ),
+                    // Phone
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -250,25 +243,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 18),
 
-                    /// COUNTRY DROPDOWN
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      hint: const Text("Country"),
-                      value: _country,
-                      items:
-                          ["Nepal", "India", "USA", "UK", "Australia", "Canada"]
-                              .map(
-                                (c) =>
-                                    DropdownMenuItem(value: c, child: Text(c)),
-                              )
-                              .toList(),
-                      onChanged: (v) => setState(() => _country = v),
-                      validator: (v) => v == null ? "Select country" : null,
-                    ),
                     const SizedBox(height: 18),
 
                     /// BIO (OPTIONAL)
