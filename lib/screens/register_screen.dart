@@ -224,23 +224,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 18),
 
-                    /// GENDER DROPDOWN
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                    // GENDER RADIO BUTTONS
+                    const Text(
+                      "Gender",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
-                      hint: const Text("Gender"),
-                      value: _gender,
-                      items: ["Male", "Female", "Other"]
-                          .map(
-                            (g) => DropdownMenuItem(value: g, child: Text(g)),
-                          )
-                          .toList(),
-                      onChanged: (v) => setState(() => _gender = v),
-                      validator: (v) => v == null ? "Select gender" : null,
                     ),
+
+                    Column(
+                      children: [
+                        RadioListTile<String>(
+                          title: const Text("Male"),
+                          value: "Male",
+                          groupValue: _gender,
+                          onChanged: (value) {
+                            setState(() => _gender = value);
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: const Text("Female"),
+                          value: "Female",
+                          groupValue: _gender,
+                          onChanged: (value) {
+                            setState(() => _gender = value);
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: const Text("Other"),
+                          value: "Other",
+                          groupValue: _gender,
+                          onChanged: (value) {
+                            setState(() => _gender = value);
+                          },
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 18),
 
                     const SizedBox(height: 18),
