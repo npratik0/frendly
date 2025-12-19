@@ -3,7 +3,7 @@ import 'app_colors.dart';
 
 class AppStyles {
   static const logoTitle = TextStyle(
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: FontWeight.w600,
     color: AppColors.primary,
     fontStyle: FontStyle.italic,
