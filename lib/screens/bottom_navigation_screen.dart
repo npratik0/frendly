@@ -16,64 +16,173 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int _selectedIndex = 0;
 
-  List<Widget> lstBottomScreen = [
-    const HomeScreen(),
-    const SearchScreen(),
-    const CreatePostScreen(),
-    const ChatScreen(),
-    const ProfileScreen(),
+  final List<Widget> lstBottomScreen = const [
+    HomeScreen(),
+    SearchScreen(),
+    CreatePostScreen(),
+    ChatScreen(),
+    ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Frendly", style: AppStyles.logoTitle,
-      )),
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // to remove back arrow
+        title: const Text("Frendly", style: AppStyles.logoTitle),
+      ),
+      endDrawer: SafeArea(
+        child: Drawer(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: Column(
+            children: [
+              //  USER HEADER
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 28,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade700, Colors.blue.shade500],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    CircleAvatar(
+                      radius: 36,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person, size: 36, color: Colors.blue),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      "Pratik Neupane",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "@pratik.dev",
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              //  DRAWER ITEMS
+              ListTile(
+                leading: const Icon(Icons.person_outline, color: Colors.blue),
+                title: const Text("My Profile"),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() => _selectedIndex = 4);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.bookmark_border, color: Colors.blue),
+                title: const Text("Saved"),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.group_outlined, color: Colors.blue),
+                title: const Text("Friends"),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.analytics_outlined,
+                  color: Colors.blue,
+                ),
+                title: const Text("Activity"),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.settings_outlined,
+                  color: Colors.blue,
+                ),
+                title: const Text("Settings"),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                onTap: () {},
+              ),
+
+              const Spacer(),
+
+              //  LOGOUT
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: const Text(
+                  "Logout",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/login');
+                  // logout logic
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        ),
+      ),
+
       body: lstBottomScreen[_selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey[450],
+        unselectedItemColor: Colors.grey.shade700,
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() => _selectedIndex = index);
+        },
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home, size: 35),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.search, size: 35),
             label: 'Search',
           ),
-          // BottomNavigationBarItem(icon: Icon(Icons.add, size: 30), label: ''),
           BottomNavigationBarItem(
             icon: Container(
               width: 80,
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.blue,
-                // shape: BoxShape.circle,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(Icons.add, color: Colors.white, size: 30),
+              child: const Icon(Icons.add, color: Colors.white, size: 30),
             ),
             label: 'Post',
           ),
-
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline, size: 35),
             label: "Chat",
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person, size: 35),
             label: "Profile",
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
       ),
     );
   }
