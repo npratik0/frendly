@@ -104,7 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () {
                     if (_form.currentState!.validate()) {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(
+                        context,
+                        '/bottom_navigation',
+                      );
                     }
                   },
                   child: const Text(
