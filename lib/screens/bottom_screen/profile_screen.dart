@@ -77,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: const [
-                ProfileStat(title: "Posts", value: "120"),
+                ProfileStat(title: "Posts", value: "0"),
                 ProfileStat(title: "Followers", value: "2.5K"),
                 ProfileStat(title: "Friends", value: "180"),
               ],
