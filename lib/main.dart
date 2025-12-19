@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frendly/screens/bottom_screen/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/bottom_navigation_screen.dart';
 
 void main() {
   runApp(const FrendlyApp());
@@ -25,6 +26,7 @@ class FrendlyApp extends StatelessWidget {
         '/login': (c) => const LoginScreen(),
         '/register': (c) => const RegisterScreen(),
         '/home': (c) => const HomeScreen(),
+        '/bottom_navigation': (c) => const BottomNavigationScreen(),
       },
     );
   }
