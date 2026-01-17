@@ -34,7 +34,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authViewModelProvider);
 
-    /// 🔥 LISTEN FOR AUTH STATE CHANGES
+    ///  LISTEN FOR AUTH STATE CHANGES
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.authenticated) {
         Navigator.pushReplacementNamed(context, '/bottom_navigation');

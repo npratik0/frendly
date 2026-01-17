@@ -13,6 +13,7 @@ class RegisterUsecaseParam extends Equatable {
   final String fullName;
   final String phoneNumber;
   final String password;
+  final String? confirmPassword;
   final String dateOfBirth;
   final String gender;
   final String? profilePicture;
@@ -24,6 +25,7 @@ class RegisterUsecaseParam extends Equatable {
     required this.fullName,
     required this.phoneNumber,
     required this.password,
+    required this.confirmPassword,
     required this.dateOfBirth,
     required this.gender,
     this.profilePicture,
@@ -36,6 +38,7 @@ class RegisterUsecaseParam extends Equatable {
     fullName,
     phoneNumber,
     password,
+    confirmPassword,
     dateOfBirth,
     gender,
     profilePicture,
@@ -63,6 +66,7 @@ class RegisterUsecase implements UsecaseWithParams<bool, RegisterUsecaseParam> {
       fullName: params.fullName,
       phoneNumber: params.phoneNumber,
       password: params.password,
+      confirmPassword: params.confirmPassword,
       dateOfBirth: params.dateOfBirth,
       gender: params.gender,
       profilePicture: params.profilePicture,

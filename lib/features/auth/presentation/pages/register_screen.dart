@@ -695,20 +695,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Column(
                       children: [
                         RadioListTile<String>(
-                          title: const Text("Male"),
-                          value: "Male",
+                          title: const Text("male"),
+                          value: "male",
                           groupValue: _gender,
                           onChanged: (v) => setState(() => _gender = v),
                         ),
                         RadioListTile<String>(
-                          title: const Text("Female"),
-                          value: "Female",
+                          title: const Text("female"),
+                          value: "female",
                           groupValue: _gender,
                           onChanged: (v) => setState(() => _gender = v),
                         ),
                         RadioListTile<String>(
-                          title: const Text("Other"),
-                          value: "Other",
+                          title: const Text("other"),
+                          value: "other",
                           groupValue: _gender,
                           onChanged: (v) => setState(() => _gender = v),
                         ),
@@ -816,8 +816,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           username: _user.text.trim(),
                           email: _email.text.trim(),
                           password: _pw.text.trim(),
+                          confirmPassword: _confirm.text.trim(),
                           fullName: _name.text.trim(),
                           phoneNumber: '$selectedCode ${_phone.text.trim()}',
+                          // phoneNumber: int.parse(_phone.text.trim()),
                           dateOfBirth:
                               "${_dob!.year}-${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}",
                           gender: _gender!,

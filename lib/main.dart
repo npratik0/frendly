@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frendly/core/constants/hive_table_constant.dart';
+import 'package:frendly/core/services/storage/user_session_service.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
 import 'package:frendly/screens/bottom_screen/home_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'features/auth/presentation/pages/login_screen.dart';
@@ -25,9 +27,18 @@ void main() async {
   }
 
   await Hive.openBox<AuthHiveModels>(HiveTableConstant.authTable);
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   // runApp(const FrendlyApp());
-  runApp(const ProviderScope(child: FrendlyApp()));
+  // runApp(const ProviderScope(child: FrendlyApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
+      child: const FrendlyApp(),
+    ),
+  );
 }
 
 class FrendlyApp extends StatelessWidget {
