@@ -1,3 +1,4 @@
+import 'package:frendly/features/auth/data/models/auth_api_model.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
 
 abstract interface class IAuthDatasource {
@@ -11,4 +12,12 @@ abstract interface class IAuthDatasource {
 
   // get email exist
   Future<bool> isEmailExist(String email);
+}
+
+abstract interface class IAuthRemoteDatasource {
+  Future<AuthApiModel> register(AuthApiModel model);
+  Future<AuthApiModel?> login({
+    required String email,
+    required String password,
+  });
 }

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frendly/core/services/hive_service.dart';
+import 'package:frendly/core/services/hive/hive_service.dart';
 import 'package:frendly/features/auth/data/datasources/auth_datasource.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
 
