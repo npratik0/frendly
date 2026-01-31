@@ -1,19 +1,25 @@
+// import 'dart:io';
+
 // import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:frendly/features/auth/presentation/view_model/auth_view_model.dart';
+// import 'package:frendly/features/auth/presentation/state/auth_state.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:permission_handler/permission_handler.dart';
 // import '../../../../theme/app_styles.dart';
 // import '../../../../theme/app_colors.dart';
 // import '../../../../widgets/custom_text_field.dart';
 // import '../../../../widgets/password_field.dart';
 // import '../../../../widgets/divider_with_text.dart';
 
-// class RegisterScreen extends StatefulWidget {
+// class RegisterScreen extends ConsumerStatefulWidget {
 //   const RegisterScreen({super.key});
 
 //   @override
-//   State<RegisterScreen> createState() => _RegisterScreenState();
+//   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 // }
 
-// class _RegisterScreenState extends State<RegisterScreen> {
+// class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 //   final _form = GlobalKey<FormState>();
 
 //   final _name = TextEditingController();
@@ -31,6 +37,10 @@
 //   String? _gender;
 //   DateTime? _dob;
 
+//   File? _profileImage;
+
+//   final ImagePicker _imagePicker = ImagePicker();
+
 //   List<String> interests = [];
 //   final List<String> allInterests = [
 //     "Sports",
@@ -45,17 +55,6 @@
 //     "Art",
 //   ];
 
-//   Future<void> _pickDOB() async {
-//     final date = await showDatePicker(
-//       context: context,
-//       initialDate: DateTime(2005),
-//       firstDate: DateTime(1950),
-//       lastDate: DateTime(2025),
-//     );
-
-//     if (date != null) setState(() => _dob = date);
-//   }
-
 //   final List<Map<String, String>> countryCodes = [
 //     {"name": "Nepal", "code": "+977"},
 //     {"name": "India", "code": "+91"},
@@ -68,9 +67,410 @@
 //   String selectedCountry = "Nepal";
 //   String selectedCode = "+977";
 
+//   Future<void> _pickDOB() async {
+//     final date = await showDatePicker(
+//       context: context,
+//       initialDate: DateTime(2005),
+//       firstDate: DateTime(1950),
+//       lastDate: DateTime(2025),
+//     );
+
+//     if (date != null) {
+//       setState(() => _dob = date);
+//     }
+//   }
+
+//   Future<bool> _requestImagePermission(ImageSource source) async {
+//     if (source == ImageSource.camera) {
+//       final status = await Permission.camera.request();
+//       return status.isGranted;
+//     } else {
+//       final status = await Permission.photos.request();
+//       return status.isGranted;
+//     }
+//   }
+
+//   void _showPermissionDeniedDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (context) => AlertDialog(
+//         title: const Text("Permission Required"),
+//         content: const Text(
+//           "Please enable camera or gallery permission from settings.",
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () => Navigator.pop(context),
+//             child: const Text("Cancel"),
+//           ),
+//           TextButton(
+//             onPressed: () {
+//               Navigator.pop(context);
+//               openAppSettings();
+//             },
+//             child: const Text("Open Settings"),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Future<void> _pickFromCamera() async {
+//     final granted = await _requestImagePermission(ImageSource.camera);
+//     if (!granted) {
+//       _showPermissionDeniedDialog();
+//       return;
+//     }
+
+//     final XFile? image = await _imagePicker.pickImage(
+//       source: ImageSource.camera,
+//       imageQuality: 80,
+//     );
+
+//     if (image != null) {
+//       setState(() {
+//         _profileImage = File(image.path);
+//       });
+//     }
+//   }
+
+//   // code for gallery
+//   // Future<void> _pickFromGallery({bool allowMultiple = false}) async {
+//   //   try {
+//   //     if (allowMultiple) {
+//   //       final List<XFile> images = await _imagePicker.pickMultiImage(
+//   //         imageQuality: 80,
+//   //       );
+
+//   //       if (images.isNotEmpty) {
+//   //         setState(() {
+//   //           _selectedMedia.clear();
+//   //           _selectedMedia.addAll(images);
+//   //           _selectedMediaType = 'photo';
+//   //         });
+//   //         // Upload first photo to server
+//   //         await ref
+//   //             .read(authViewModelProvider.notifier)
+//   //             .uploadPhoto(File(images.first.path));
+//   //       }
+//   //     } else {
+//   //       final XFile? image = await _imagePicker.pickImage(
+//   //         source: ImageSource.gallery,
+//   //         imageQuality: 80,
+//   //       );
+
+//   //       if (image != null) {
+//   //         setState(() {
+//   //           _selectedMedia.clear();
+//   //           _selectedMedia.add(image);
+//   //           _selectedMediaType = 'photo';
+//   //         });
+//   //         // Upload photo to server
+//   //         await ref
+//   //             .read(authViewModelProvider.notifier)
+//   //             .uploadPhoto(File(image.path));
+//   //       }
+//   //     }
+//   //   } catch (e) {
+//   //     debugPrint('Gallery Error $e');
+
+//   //     if (mounted) {
+//   //       SnackbarUtils.showError(
+//   //         context,
+//   //         'Unable to access gallery. Please try using the camera instead.',
+//   //       );
+//   //     }
+//   //   }
+//   // }
+
+//   Future<void> _pickFromGallery() async {
+//     final granted = await _requestImagePermission(ImageSource.gallery);
+//     if (!granted) {
+//       _showPermissionDeniedDialog();
+//       return;
+//     }
+
+//     final XFile? image = await _imagePicker.pickImage(
+//       source: ImageSource.gallery,
+//       imageQuality: 80,
+//     );
+
+//     // if (image != null) {
+//     //   setState(() {
+//     //     _profileImage = File(image.path);
+//     //   });
+//     // }
+
+//     if (image != null) {
+//       setState(() {
+//         // _selectedMedia.clear();
+//         // _selectedMedia.add(image);
+//         // _selectedMediaType = 'photo';
+//       });
+//       // Upload photo to server
+//       await ref
+//           .read(authViewModelProvider.notifier)
+//           .uploadPhoto(File(image.path));
+//     }
+//   }
+
+//   Future<void> _pickMedia() async {
+//     showModalBottomSheet(
+//       context: context,
+//       shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//       ),
+//       builder: (context) => SafeArea(
+//         child: Padding(
+//           padding: const EdgeInsets.all(20),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               ListTile(
+//                 leading: const Icon(Icons.camera_alt),
+//                 title: const Text("Open Camera"),
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   _pickFromCamera();
+//                 },
+//               ),
+//               ListTile(
+//                 leading: const Icon(Icons.photo_library),
+//                 title: const Text("Open Gallery"),
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   _pickFromGallery();
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   // // Media selection
+//   // final List<XFile> _selectedMedia = []; // images or video
+//   // final ImagePicker _imagePicker = ImagePicker();
+//   // String? _selectedMediaType; // 'image' or 'video'
+
+//   // Future<bool> _requestPermission(Permission permission) async {
+//   //   final status = await permission.status;
+//   //   if (status.isGranted) {
+//   //     return true;
+//   //   }
+
+//   //   if (status.isDenied) {
+//   //     final result = await permission.request();
+//   //     return result.isGranted;
+//   //   }
+
+//   //   if (status.isPermanentlyDenied) {
+//   //     _showPermissionDeniedDialog();
+//   //     return false;
+//   //   }
+
+//   //   return false;
+//   // }
+
+//   // void _showPermissionDeniedDialog() {
+//   //   showDialog(
+//   //     context: context,
+//   //     builder: (context) => AlertDialog(
+//   //       title: const Text("Permission Required"),
+//   //       content: const Text(
+//   //         "This feature requires permission to access your camera or gallery. Please enable it in your device settings.",
+//   //       ),
+//   //       actions: [
+//   //         TextButton(
+//   //           onPressed: () => Navigator.of(context).pop(),
+//   //           child: const Text('Cancel'),
+//   //         ),
+//   //         TextButton(
+//   //           onPressed: () {
+//   //             Navigator.of(context).pop();
+//   //             openAppSettings();
+//   //           },
+//   //           child: const Text('Open Settings'),
+//   //         ),
+//   //       ],
+//   //     ),
+//   //   );
+//   // }
+
+//   // // code for camera
+//   // Future<void> _pickFromCamera() async {
+//   //   final hasPermission = await _requestPermission(Permission.camera);
+//   //   if (!hasPermission) return;
+
+//   //   final XFile? photo = await _imagePicker.pickImage(
+//   //     source: ImageSource.camera,
+//   //     imageQuality: 80,
+//   //   );
+
+//   //   if (photo != null) {
+//   //     setState(() {
+//   //       _selectedMedia.clear();
+//   //       _selectedMedia.add(photo);
+//   //       _selectedMediaType = 'photo';
+//   //     });
+//   //     // Upload photo to server
+//   //     await ref
+//   //         .read(authViewModelProvider.notifier)
+//   //         .uploadPhoto(File(photo.path));
+//   //   }
+//   // }
+
+//   // // code for gallery
+//   // Future<void> _pickFromGallery({bool allowMultiple = false}) async {
+//   //   try {
+//   //     if (allowMultiple) {
+//   //       final List<XFile> images = await _imagePicker.pickMultiImage(
+//   //         imageQuality: 80,
+//   //       );
+
+//   //       if (images.isNotEmpty) {
+//   //         setState(() {
+//   //           _selectedMedia.clear();
+//   //           _selectedMedia.addAll(images);
+//   //           _selectedMediaType = 'photo';
+//   //         });
+//   //         // Upload first photo to server
+//   //         await ref
+//   //             .read(authViewModelProvider.notifier)
+//   //             .uploadPhoto(File(images.first.path));
+//   //       }
+//   //     } else {
+//   //       final XFile? image = await _imagePicker.pickImage(
+//   //         source: ImageSource.gallery,
+//   //         imageQuality: 80,
+//   //       );
+
+//   //       if (image != null) {
+//   //         setState(() {
+//   //           _selectedMedia.clear();
+//   //           _selectedMedia.add(image);
+//   //           _selectedMediaType = 'photo';
+//   //         });
+//   //         // Upload photo to server
+//   //         await ref
+//   //             .read(authViewModelProvider.notifier)
+//   //             .uploadPhoto(File(image.path));
+//   //       }
+//   //     }
+//   //   } catch (e) {
+//   //     debugPrint('Gallery Error $e');
+
+//   //     if (mounted) {
+//   //       SnackbarUtils.showError(
+//   //         context,
+//   //         'Unable to access gallery. Please try using the camera instead.',
+//   //       );
+//   //     }
+//   //   }
+//   // }
+
+//   // // code for video
+//   // Future<void> _pickFromVideo() async {
+//   //   try {
+//   //     final hasPermission = await _requestPermission(Permission.camera);
+//   //     if (!hasPermission) return;
+
+//   //     final hasMicPermission = await _requestPermission(Permission.microphone);
+//   //     if (!hasMicPermission) return;
+
+//   //     final XFile? video = await _imagePicker.pickVideo(
+//   //       source: ImageSource.camera,
+//   //       maxDuration: const Duration(minutes: 1),
+//   //     );
+
+//   //     if (video != null) {
+//   //       setState(() {
+//   //         _selectedMedia.clear();
+//   //         _selectedMedia.add(video);
+//   //         _selectedMediaType = 'video';
+//   //       });
+//   //       // Upload video to server
+//   //       await ref
+//   //           .read(authViewModelProvider.notifier)
+//   //           .uploadVideo(File(video.path));
+//   //     }
+//   //   } catch (e) {
+//   //     _showPermissionDeniedDialog();
+//   //   }
+//   // }
+
+//   // // code for dialogBox : showDialog for menu
+//   // Future<void> _pickMedia() async {
+//   //   showModalBottomSheet(
+//   //     context: context,
+//   //     backgroundColor: context.surfaceColor,
+//   //     shape: RoundedRectangleBorder(
+//   //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//   //     ),
+//   //     builder: (context) => SafeArea(
+//   //       child: Padding(
+//   //         padding: EdgeInsets.all(20),
+//   //         child: Column(
+//   //           mainAxisSize: MainAxisSize.min,
+//   //           children: [
+//   //             ListTile(
+//   //               leading: Icon(Icons.camera),
+//   //               title: Text('Open Camera'),
+//   //               onTap: () {
+//   //                 Navigator.pop(context);
+//   //                 _pickFromCamera();
+//   //               },
+//   //             ),
+//   //             ListTile(
+//   //               leading: Icon(Icons.browse_gallery),
+//   //               title: Text('Open Gallery'),
+//   //               onTap: () {
+//   //                 Navigator.pop(context);
+//   //                 _pickFromGallery();
+//   //               },
+//   //             ),
+//   //             ListTile(
+//   //               leading: Icon(Icons.video_call),
+//   //               title: Text('Record Video'),
+//   //               onTap: () {
+//   //                 Navigator.pop(context);
+//   //                 _pickFromVideo();
+//   //               },
+//   //             ),
+//   //           ],
+//   //         ),
+//   //       ),
+//   //     ),
+//   //   );
+//   // }
+
 //   @override
 //   Widget build(BuildContext context) {
-//     // authstate
+//     /// Listen to auth state changes
+//     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
+//       if (next.status == AuthStatus.registered) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(
+//             content: Text("Registration successful! Please login."),
+//             behavior: SnackBarBehavior.floating,
+//             backgroundColor: Colors.green,
+//           ),
+//         );
+//         Navigator.pushReplacementNamed(context, '/login');
+//       }
+
+//       if (next.status == AuthStatus.error) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content: Text(next.errorMessage ?? "Something went wrong"),
+//             behavior: SnackBarBehavior.floating,
+//             backgroundColor: Colors.red,
+//           ),
+//         );
+//       }
+//     });
+
 //     return Scaffold(
 //       body: SafeArea(
 //         child: SingleChildScrollView(
@@ -96,15 +496,32 @@
 //                   crossAxisAlignment: CrossAxisAlignment.start,
 //                   children: [
 //                     /// PROFILE PICTURE
-//                     Center(
+//                     // Center(
+//                     //   child: CircleAvatar(
+//                     //     radius: 45,
+//                     //     backgroundColor: Colors.grey.shade300,
+//                     //     child: Icon(
+//                     //       Icons.camera_alt,
+//                     //       size: 40,
+//                     //       color: Colors.grey.shade700,
+//                     //     ),
+//                     //   ),
+//                     // ),
+//                     GestureDetector(
+//                       onTap: _pickMedia,
 //                       child: CircleAvatar(
 //                         radius: 45,
 //                         backgroundColor: Colors.grey.shade300,
-//                         child: Icon(
-//                           Icons.camera_alt,
-//                           size: 40,
-//                           color: Colors.grey.shade700,
-//                         ),
+//                         backgroundImage: _profileImage != null
+//                             ? FileImage(_profileImage!)
+//                             : null,
+//                         child: _profileImage == null
+//                             ? Icon(
+//                                 Icons.camera_alt,
+//                                 size: 40,
+//                                 color: Colors.grey.shade700,
+//                               )
+//                             : null,
 //                       ),
 //                     ),
 
@@ -139,7 +556,7 @@
 //                     ),
 //                     const SizedBox(height: 18),
 
-//                     // Phone
+//                     /// PHONE NUMBER
 //                     Container(
 //                       padding: const EdgeInsets.symmetric(
 //                         horizontal: 12,
@@ -151,7 +568,6 @@
 //                       ),
 //                       child: Row(
 //                         children: [
-//                           /// COUNTRY DROPDOWN
 //                           DropdownButtonHideUnderline(
 //                             child: DropdownButton<String>(
 //                               value: selectedCountry,
@@ -159,7 +575,7 @@
 //                               items: countryCodes.map((c) {
 //                                 return DropdownMenuItem(
 //                                   value: c["name"],
-//                                   child: Row(children: [Text(c["name"]!)]),
+//                                   child: Text(c["name"]!),
 //                                 );
 //                               }).toList(),
 //                               onChanged: (value) {
@@ -172,10 +588,7 @@
 //                               },
 //                             ),
 //                           ),
-
 //                           const SizedBox(width: 8),
-
-//                           /// COUNTRY CODE TEXT
 //                           Text(
 //                             selectedCode,
 //                             style: const TextStyle(
@@ -183,10 +596,7 @@
 //                               fontWeight: FontWeight.w500,
 //                             ),
 //                           ),
-
 //                           const SizedBox(width: 12),
-
-//                           /// PHONE NUMBER INPUT
 //                           Expanded(
 //                             child: TextFormField(
 //                               controller: _phone,
@@ -202,9 +612,10 @@
 //                         ],
 //                       ),
 //                     ),
+
 //                     const SizedBox(height: 18),
 
-//                     /// DATE OF BIRTH
+//                     /// DOB
 //                     GestureDetector(
 //                       onTap: _pickDOB,
 //                       child: Container(
@@ -224,9 +635,10 @@
 //                         ),
 //                       ),
 //                     ),
+
 //                     const SizedBox(height: 18),
 
-//                     // GENDER RADIO BUTTONS
+//                     /// GENDER
 //                     const Text(
 //                       "Gender",
 //                       style: TextStyle(
@@ -234,46 +646,34 @@
 //                         fontSize: 16,
 //                       ),
 //                     ),
-
 //                     Column(
 //                       children: [
 //                         RadioListTile<String>(
-//                           title: const Text("Male"),
-//                           value: "Male",
+//                           title: const Text("male"),
+//                           value: "male",
 //                           groupValue: _gender,
-//                           onChanged: (value) {
-//                             setState(() => _gender = value);
-//                           },
+//                           onChanged: (v) => setState(() => _gender = v),
 //                         ),
 //                         RadioListTile<String>(
-//                           title: const Text("Female"),
-//                           value: "Female",
+//                           title: const Text("female"),
+//                           value: "female",
 //                           groupValue: _gender,
-//                           onChanged: (value) {
-//                             setState(() => _gender = value);
-//                           },
+//                           onChanged: (v) => setState(() => _gender = v),
 //                         ),
 //                         RadioListTile<String>(
-//                           title: const Text("Other"),
-//                           value: "Other",
+//                           title: const Text("other"),
+//                           value: "other",
 //                           groupValue: _gender,
-//                           onChanged: (value) {
-//                             setState(() => _gender = value);
-//                           },
+//                           onChanged: (v) => setState(() => _gender = v),
 //                         ),
 //                       ],
 //                     ),
 
 //                     const SizedBox(height: 18),
 
-//                     const SizedBox(height: 18),
+//                     /// BIO
+//                     CustomTextField(controller: _bio, hint: "Bio (optional)"),
 
-//                     /// BIO (OPTIONAL)
-//                     CustomTextField(
-//                       controller: _bio,
-//                       hint: "Bio (optional)",
-//                       // maxLines: 3,
-//                     ),
 //                     const SizedBox(height: 18),
 
 //                     /// INTERESTS
@@ -292,10 +692,9 @@
 //                           selected: selected,
 //                           onSelected: (v) {
 //                             setState(() {
-//                               if (v)
-//                                 interests.add(interest);
-//                               else
-//                                 interests.remove(interest);
+//                               v
+//                                   ? interests.add(interest)
+//                                   : interests.remove(interest);
 //                             });
 //                           },
 //                         );
@@ -313,6 +712,7 @@
 //                       validator: (v) =>
 //                           v!.length < 6 ? "Minimum 6 characters" : null,
 //                     ),
+
 //                     const SizedBox(height: 18),
 
 //                     /// CONFIRM PASSWORD
@@ -353,22 +753,33 @@
 //                     ),
 //                   ),
 //                   onPressed: () {
-//                     if (_form.currentState!.validate() && _agree) {
-//                       // Navigator.pushReplacementNamed(context, '/home');
-//                       ref
-//                           .read(authViewModelProvider.notifier)
-//                           .register(
-//                             username: _user.text,
-//                             email: _email.text,
-//                             password: _pw.text,
-//                             fullName: _name.text,
-//                             phoneNumber: '$selectedCode ${_phone.text}',
-//                             dob: _dob!,
-//                             gender: _gender!,
-//                             profilePicture: null,
-//                             bio: _bio.text,
-//                           );
+//                     if (!_form.currentState!.validate()) return;
+
+//                     if (!_agree || _dob == null || _gender == null) {
+//                       ScaffoldMessenger.of(context).showSnackBar(
+//                         const SnackBar(
+//                           content: Text("Please complete all required fields"),
+//                         ),
+//                       );
+//                       return;
 //                     }
+
+//                     ref
+//                         .read(authViewModelProvider.notifier)
+//                         .register(
+//                           username: _user.text.trim(),
+//                           email: _email.text.trim(),
+//                           password: _pw.text.trim(),
+//                           confirmPassword: _confirm.text.trim(),
+//                           fullName: _name.text.trim(),
+//                           phoneNumber: '$selectedCode ${_phone.text.trim()}',
+//                           // phoneNumber: int.parse(_phone.text.trim()),
+//                           dateOfBirth:
+//                               "${_dob!.year}-${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}",
+//                           gender: _gender!,
+//                           profilePicture: null,
+//                           bio: _bio.text.trim(),
+//                         );
 //                   },
 //                   child: const Text(
 //                     "Sign Up",
@@ -417,9 +828,7 @@
 //                       ),
 //                       shape: RoundedRectangleBorder(
 //                         borderRadius: BorderRadius.circular(8),
-//                         side: const BorderSide(
-//                           color: Colors.grey,
-//                         ), // subtle border
+//                         side: const BorderSide(color: Colors.grey),
 //                       ),
 //                       elevation: 5,
 //                     ),
@@ -434,10 +843,324 @@
 //   }
 // }
 
+// // import 'dart:io';
+
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // import 'package:image_picker/image_picker.dart';
+// // import 'package:permission_handler/permission_handler.dart';
+
+// // import 'package:frendly/features/auth/presentation/view_model/auth_view_model.dart';
+// // import 'package:frendly/features/auth/presentation/state/auth_state.dart';
+
+// // import '../../../../theme/app_styles.dart';
+// // import '../../../../theme/app_colors.dart';
+// // import '../../../../widgets/custom_text_field.dart';
+// // import '../../../../widgets/password_field.dart';
+// // import '../../../../widgets/divider_with_text.dart';
+
+// // class RegisterScreen extends ConsumerStatefulWidget {
+// //   const RegisterScreen({super.key});
+
+// //   @override
+// //   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
+// // }
+
+// // class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+// //   final _form = GlobalKey<FormState>();
+
+// //   final _name = TextEditingController();
+// //   final _user = TextEditingController();
+// //   final _email = TextEditingController();
+// //   final _phone = TextEditingController();
+// //   final _pw = TextEditingController();
+// //   final _confirm = TextEditingController();
+// //   final _bio = TextEditingController();
+
+// //   bool _hidePw = true;
+// //   bool _hideConfirm = true;
+// //   bool _agree = false;
+
+// //   String? _gender;
+// //   DateTime? _dob;
+
+// //   File? _profileImage;
+
+// //   final ImagePicker _imagePicker = ImagePicker();
+
+// //   final List<String> interests = [];
+// //   final List<String> allInterests = [
+// //     "Sports",
+// //     "Music",
+// //     "Gaming",
+// //     "Movies",
+// //     "Travel",
+// //     "Tech",
+// //     "Fitness",
+// //     "Food",
+// //     "Books",
+// //     "Art",
+// //   ];
+
+// //   final List<Map<String, String>> countryCodes = [
+// //     {"name": "Nepal", "code": "+977"},
+// //     {"name": "India", "code": "+91"},
+// //     {"name": "USA", "code": "+1"},
+// //     {"name": "UK", "code": "+44"},
+// //     {"name": "Australia", "code": "+61"},
+// //     {"name": "Canada", "code": "+1"},
+// //   ];
+
+// //   String selectedCountry = "Nepal";
+// //   String selectedCode = "+977";
+
+// //   Future<void> _pickDOB() async {
+// //     final date = await showDatePicker(
+// //       context: context,
+// //       initialDate: DateTime(2005),
+// //       firstDate: DateTime(1950),
+// //       lastDate: DateTime(2025),
+// //     );
+
+// //     if (date != null) {
+// //       setState(() => _dob = date);
+// //     }
+// //   }
+
+// //   Future<bool> _requestImagePermission(ImageSource source) async {
+// //     if (source == ImageSource.camera) {
+// //       final status = await Permission.camera.request();
+// //       return status.isGranted;
+// //     } else {
+// //       final status = await Permission.photos.request();
+// //       return status.isGranted;
+// //     }
+// //   }
+
+// //   void _showPermissionDeniedDialog() {
+// //     showDialog(
+// //       context: context,
+// //       builder: (context) => AlertDialog(
+// //         title: const Text("Permission Required"),
+// //         content: const Text(
+// //           "Please enable camera or gallery permission from settings.",
+// //         ),
+// //         actions: [
+// //           TextButton(
+// //             onPressed: () => Navigator.pop(context),
+// //             child: const Text("Cancel"),
+// //           ),
+// //           TextButton(
+// //             onPressed: () {
+// //               Navigator.pop(context);
+// //               openAppSettings();
+// //             },
+// //             child: const Text("Open Settings"),
+// //           ),
+// //         ],
+// //       ),
+// //     );
+// //   }
+
+// //   Future<void> _pickFromCamera() async {
+// //     final granted = await _requestImagePermission(ImageSource.camera);
+// //     if (!granted) {
+// //       _showPermissionDeniedDialog();
+// //       return;
+// //     }
+
+// //     final XFile? image = await _imagePicker.pickImage(
+// //       source: ImageSource.camera,
+// //       imageQuality: 80,
+// //     );
+
+// //     if (image != null) {
+// //       setState(() {
+// //         _profileImage = File(image.path);
+// //       });
+// //     }
+// //   }
+
+// //   Future<void> _pickFromGallery() async {
+// //     final granted = await _requestImagePermission(ImageSource.gallery);
+// //     if (!granted) {
+// //       _showPermissionDeniedDialog();
+// //       return;
+// //     }
+
+// //     final XFile? image = await _imagePicker.pickImage(
+// //       source: ImageSource.gallery,
+// //       imageQuality: 80,
+// //     );
+
+// //     if (image != null) {
+// //       setState(() {
+// //         _profileImage = File(image.path);
+// //       });
+// //     }
+// //   }
+
+// //   Future<void> _pickMedia() async {
+// //     showModalBottomSheet(
+// //       context: context,
+// //       shape: const RoundedRectangleBorder(
+// //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+// //       ),
+// //       builder: (context) => SafeArea(
+// //         child: Padding(
+// //           padding: const EdgeInsets.all(20),
+// //           child: Column(
+// //             mainAxisSize: MainAxisSize.min,
+// //             children: [
+// //               ListTile(
+// //                 leading: const Icon(Icons.camera_alt),
+// //                 title: const Text("Open Camera"),
+// //                 onTap: () {
+// //                   Navigator.pop(context);
+// //                   _pickFromCamera();
+// //                 },
+// //               ),
+// //               ListTile(
+// //                 leading: const Icon(Icons.photo_library),
+// //                 title: const Text("Open Gallery"),
+// //                 onTap: () {
+// //                   Navigator.pop(context);
+// //                   _pickFromGallery();
+// //                 },
+// //               ),
+// //             ],
+// //           ),
+// //         ),
+// //       ),
+// //     );
+// //   }
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
+// //       if (next.status == AuthStatus.registered) {
+// //         ScaffoldMessenger.of(context).showSnackBar(
+// //           const SnackBar(
+// //             content: Text("Registration successful! Please login."),
+// //             backgroundColor: Colors.green,
+// //           ),
+// //         );
+// //         Navigator.pushReplacementNamed(context, '/login');
+// //       }
+
+// //       if (next.status == AuthStatus.error) {
+// //         ScaffoldMessenger.of(context).showSnackBar(
+// //           SnackBar(
+// //             content: Text(next.errorMessage ?? "Something went wrong"),
+// //             backgroundColor: Colors.red,
+// //           ),
+// //         );
+// //       }
+// //     });
+
+// //     return Scaffold(
+// //       body: SafeArea(
+// //         child: SingleChildScrollView(
+// //           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+// //           child: Column(
+// //             children: [
+// //               const SizedBox(height: 10),
+// //               const Text("Frendly", style: AppStyles.logoTitle),
+// //               const SizedBox(height: 20),
+// //               const Text("CREATE ACCOUNT", style: AppStyles.screenTitle),
+// //               const SizedBox(height: 10),
+// //               const Text("Join the community!", style: AppStyles.subtitle),
+// //               const SizedBox(height: 32),
+
+// //               Form(
+// //                 key: _form,
+// //                 child: Column(
+// //                   children: [
+// //                     GestureDetector(
+// //                       onTap: _pickMedia,
+// //                       child: CircleAvatar(
+// //                         radius: 45,
+// //                         backgroundColor: Colors.grey.shade300,
+// //                         backgroundImage: _profileImage != null
+// //                             ? FileImage(_profileImage!)
+// //                             : null,
+// //                         child: _profileImage == null
+// //                             ? Icon(
+// //                                 Icons.camera_alt,
+// //                                 size: 40,
+// //                                 color: Colors.grey.shade700,
+// //                               )
+// //                             : null,
+// //                       ),
+// //                     ),
+
+// //                     const SizedBox(height: 20),
+
+// //                     CustomTextField(
+// //                       controller: _name,
+// //                       hint: "Full Name",
+// //                       validator: (v) => v!.isEmpty ? "Enter full name" : null,
+// //                     ),
+
+// //                     const SizedBox(height: 18),
+
+// //                     CustomTextField(
+// //                       controller: _user,
+// //                       hint: "Username",
+// //                       validator: (v) => v!.isEmpty ? "Enter username" : null,
+// //                     ),
+
+// //                     const SizedBox(height: 18),
+
+// //                     CustomTextField(
+// //                       controller: _email,
+// //                       hint: "Email",
+// //                       validator: (v) {
+// //                         if (v == null || v.isEmpty) return "Enter email";
+// //                         if (!v.contains("@")) return "Invalid email";
+// //                         return null;
+// //                       },
+// //                     ),
+
+// //                     const SizedBox(height: 18),
+
+// //                     PasswordField(
+// //                       controller: _pw,
+// //                       hint: "Password",
+// //                       obscure: _hidePw,
+// //                       onToggle: () => setState(() => _hidePw = !_hidePw),
+// //                     ),
+
+// //                     const SizedBox(height: 18),
+
+// //                     PasswordField(
+// //                       controller: _confirm,
+// //                       hint: "Confirm Password",
+// //                       obscure: _hideConfirm,
+// //                       onToggle: () =>
+// //                           setState(() => _hideConfirm = !_hideConfirm),
+// //                       validator: (v) =>
+// //                           v != _pw.text ? "Passwords do not match" : null,
+// //                     ),
+// //                   ],
+// //                 ),
+// //               ),
+// //             ],
+// //           ),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frendly/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:frendly/features/auth/presentation/state/auth_state.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../theme/app_styles.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../widgets/custom_text_field.dart';
@@ -468,6 +1191,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   String? _gender;
   DateTime? _dob;
+
+  File? _profileImage;
+
+  final ImagePicker _imagePicker = ImagePicker();
 
   List<String> interests = [];
   final List<String> allInterests = [
@@ -506,6 +1233,114 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (date != null) {
       setState(() => _dob = date);
     }
+  }
+
+  Future<bool> _requestImagePermission(ImageSource source) async {
+    if (source == ImageSource.camera) {
+      final status = await Permission.camera.request();
+      return status.isGranted;
+    } else {
+      final status = await Permission.photos.request();
+      return status.isGranted;
+    }
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Permission Required"),
+        content: const Text(
+          "Please enable camera or gallery permission from settings.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings();
+            },
+            child: const Text("Open Settings"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickFromCamera() async {
+    final granted = await _requestImagePermission(ImageSource.camera);
+    if (!granted) {
+      _showPermissionDeniedDialog();
+      return;
+    }
+
+    final XFile? image = await _imagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 80,
+    );
+
+    if (image != null) {
+      setState(() {
+        _profileImage = File(image.path);
+      });
+    }
+  }
+
+  Future<void> _pickFromGallery() async {
+    final granted = await _requestImagePermission(ImageSource.gallery);
+    if (!granted) {
+      _showPermissionDeniedDialog();
+      return;
+    }
+
+    final XFile? image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+
+    if (image != null) {
+      setState(() {
+        _profileImage = File(image.path);
+      });
+    }
+  }
+
+  Future<void> _pickMedia() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text("Open Camera"),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickFromCamera();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text("Open Gallery"),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickFromGallery();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -560,13 +1395,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   children: [
                     /// PROFILE PICTURE
                     Center(
-                      child: CircleAvatar(
-                        radius: 45,
-                        backgroundColor: Colors.grey.shade300,
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 40,
-                          color: Colors.grey.shade700,
+                      child: GestureDetector(
+                        onTap: _pickMedia,
+                        child: CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.grey.shade300,
+                          backgroundImage: _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : null,
+                          child: _profileImage == null
+                              ? Icon(
+                                  Icons.camera_alt,
+                                  size: 40,
+                                  color: Colors.grey.shade700,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -819,11 +1662,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           confirmPassword: _confirm.text.trim(),
                           fullName: _name.text.trim(),
                           phoneNumber: '$selectedCode ${_phone.text.trim()}',
-                          // phoneNumber: int.parse(_phone.text.trim()),
                           dateOfBirth:
                               "${_dob!.year}-${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}",
                           gender: _gender!,
-                          profilePicture: null,
+                          profilePicture: _profileImage?.path ?? '',
                           bio: _bio.text.trim(),
                         );
                   },
