@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frendly/core/api/api_client.dart';
 import 'package:frendly/core/api/api_endpoints.dart';
+import 'package:frendly/core/services/storage/token_service.dart';
 import 'package:frendly/core/services/storage/user_session_service.dart';
 import 'package:frendly/features/auth/data/datasources/auth_datasource.dart';
 import 'package:frendly/features/auth/data/models/auth_api_model.dart';
@@ -11,18 +15,22 @@ final authRemoteDatasourceProvider = Provider<IAuthRemoteDatasource>((ref) {
   return AuthRemoteDatasource(
     apiClient: ref.read(apiClientProvider),
     userSessionService: ref.read(userSessionServiceProvider),
+    tokenService: ref.read(tokenServiceProvider),
   );
 });
 
 class AuthRemoteDatasource implements IAuthRemoteDatasource {
   final ApiClient _apiClient;
   final UserSessionService _userSessionService;
+  final TokenService _tokenService;
 
   AuthRemoteDatasource({
     required ApiClient apiClient,
     required UserSessionService userSessionService,
+    required TokenService tokenService,
   }) : _apiClient = apiClient,
-       _userSessionService = userSessionService;
+       _userSessionService = userSessionService,
+       _tokenService = tokenService;
 
   @override
   Future<AuthApiModel?> login({
@@ -49,6 +57,10 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
       return user;
     }
 
+    // save token
+    final token = response.data['token'] as String?;
+    await _tokenService.saveToken(token!);
+
     return null;
   }
 
@@ -67,5 +79,22 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
     }
 
     return model;
+  }
+
+  @override
+  Future<String> uploadPhoto(File photo) async {
+    final fileName = photo.path.split('/').last;
+    final formData = FormData.fromMap({
+      'itemPhoto': await MultipartFile.fromFile(photo.path, filename: fileName),
+    });
+    // Get token from token service
+    final token = await _tokenService.getToken();
+    final response = await _apiClient.uploadFile(
+      '/api/auth/upload-photo',
+      formData: formData,
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+
+    return response.data['data'];
   }
 }
