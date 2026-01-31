@@ -10,7 +10,7 @@ class AuthApiModel {
   final String? confirmPassword;
   final String dateOfBirth;
   final String gender;
-  // final String? profilePicture;
+  final String? profilePicture;
   // final String? bio;
 
   AuthApiModel({
@@ -23,7 +23,7 @@ class AuthApiModel {
     this.confirmPassword,
     required this.dateOfBirth,
     required this.gender,
-    // this.profilePicture,
+    this.profilePicture,
     // this.bio,
   });
 
@@ -39,7 +39,7 @@ class AuthApiModel {
       'confirmPassword': confirmPassword,
       'dateOfBirth': dateOfBirth,
       'gender': gender,
-      // 'profilePicture': profilePicture,
+      'profilePicture': profilePicture,
       // 'bio': bio,
     };
   }
@@ -56,7 +56,7 @@ class AuthApiModel {
       confirmPassword: json['confirmPassword'],
       dateOfBirth: json['dateOfBirth'],
       gender: json['gender'],
-      // profilePicture: json['profilePicture'],
+      profilePicture: json['profilePicture'],
       // bio: json['bio'],
     );
   }
@@ -73,7 +73,7 @@ class AuthApiModel {
       confirmPassword: confirmPassword,
       dateOfBirth: dateOfBirth,
       gender: gender,
-      // profilePicture: profilePicture,
+      profilePicture: profilePicture,
       // bio: bio,
     );
   }
@@ -91,7 +91,7 @@ class AuthApiModel {
       confirmPassword: entity.confirmPassword,
       dateOfBirth: entity.dateOfBirth,
       gender: entity.gender,
-      // profilePicture: entity.profilePicture,
+      profilePicture: entity.profilePicture,
       // bio: entity.bio,
     );
   }
