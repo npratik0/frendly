@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:frendly/features/auth/data/models/auth_api_model.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
 
@@ -20,4 +22,5 @@ abstract interface class IAuthRemoteDatasource {
     required String email,
     required String password,
   });
+  Future<String> uploadPhoto(File photo);
 }
