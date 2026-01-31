@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frendly/screens/bottom_screen/chat_screen.dart';
 import 'package:frendly/screens/bottom_screen/create_post_screen.dart';
 import 'package:frendly/screens/bottom_screen/home_screen.dart';
-import 'package:frendly/screens/bottom_screen/profile_screen.dart';
+import 'package:frendly/features/profile/presentation/profile_screen.dart';
 import 'package:frendly/screens/bottom_screen/search_screen.dart';
 import 'package:frendly/theme/app_styles.dart';
 
