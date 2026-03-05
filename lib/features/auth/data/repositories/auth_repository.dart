@@ -110,7 +110,8 @@ class AuthRepository implements IAuthRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return const Left(NetworkFailure(message: 'No internet connection'));
+      // return const Left(NetworkFailure(message: 'No internet connection'));
+      return const Left(NetworkFailure());
     }
   }
 

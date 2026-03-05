@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frendly/core/services/storage/token_service.dart';
 import 'package:frendly/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:hive/hive.dart';
 
 import '../../../../theme/app_styles.dart';
 import '../../../../theme/app_colors.dart';
@@ -33,6 +35,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authViewModelProvider);
+
+    ref.listen<AuthState>(authViewModelProvider, (previous, next) async {
+      if (next.status == AuthStatus.authenticated) {
+        // NEW: Save token to Hive before navigation
+        try {
+          final tokenService = ref.read(tokenServiceProvider);
+          final token = await tokenService.getToken();
+
+          if (token != null && next.authEntity != null) {
+            final authBox = await Hive.openBox('auth_box');
+            await authBox.put('token', token);
+            await authBox.put('current_user', {
+              '_id': next.authEntity!.authId,
+              'email': next.authEntity!.email,
+              'username': next.authEntity!.username,
+              'fullName': next.authEntity!.fullName,
+              'phoneNumber': next.authEntity!.phoneNumber,
+              'gender': next.authEntity!.gender,
+              'dateOfBirth': next.authEntity!.dateOfBirth,
+              'profilePicture': next.authEntity!.profilePicture,
+              'bio': next.authEntity!.bio,
+            });
+            print('✅ Token synced from login screen');
+          }
+        } catch (e) {
+          print('❌ Error syncing token: $e');
+        }
+
+        Navigator.pushReplacementNamed(context, '/bottom_navigation');
+      }
+
+      if (next.status == AuthStatus.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.errorMessage ?? 'Login failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
 
     ///  LISTEN FOR AUTH STATE CHANGES
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {

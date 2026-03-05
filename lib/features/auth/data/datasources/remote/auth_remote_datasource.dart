@@ -9,6 +9,7 @@ import 'package:frendly/core/services/storage/user_session_service.dart';
 import 'package:frendly/features/auth/data/datasources/auth_datasource.dart';
 import 'package:frendly/features/auth/data/models/auth_api_model.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
+import 'package:hive/hive.dart';
 
 // Create a provider
 final authRemoteDatasourceProvider = Provider<IAuthRemoteDatasource>((ref) {
@@ -45,6 +46,13 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
     if (response.data['success'] == true) {
       final data = response.data["data"] as Map<String, dynamic>;
       final user = AuthApiModel.fromJson(data);
+
+      final authBox = await Hive.openBox('auth_box');
+      await authBox.put('token', response.data['token']);
+      await authBox.put('current_user', response.data['data']);
+      print(
+        '✅ Token saved to Hive: ${response.data['token'].substring(0, 30)}...',
+      );
 
       // Save session
       await _userSessionService.saveUserSession(
