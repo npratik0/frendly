@@ -192,27 +192,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                     ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Column(
-                    children: [
-                      ProfileHeader(
-                        profile: profile,
-                        isCurrentUser: isCurrentUser,
-                        onEditProfile: () {
-                          // Navigate to edit profile
-                        },
-                        onFollow: () {
-                          final targetUserId = widget.userId ?? _currentUserId;
-                          if (targetUserId != null) {
-                            ref
-                                .read(profileProvider.notifier)
-                                .toggleFollow(targetUserId);
-                          }
-                        },
-                      ),
-                      SizedBox(height: 16),
-                      ProfileStats(profile: profile),
-                      SizedBox(height: 16),
-                    ],
+                  background: SingleChildScrollView(
+                    // Wrap in scroll view to prevent overflow on smaller screens
+                    child: Column(
+                      children: [
+                        ProfileHeader(
+                          profile: profile,
+                          isCurrentUser: isCurrentUser,
+                          onEditProfile: () {
+                            // Navigate to edit profile
+                          },
+                          onFollow: () {
+                            final targetUserId =
+                                widget.userId ?? _currentUserId;
+                            if (targetUserId != null) {
+                              ref
+                                  .read(profileProvider.notifier)
+                                  .toggleFollow(targetUserId);
+                            }
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        ProfileStats(profile: profile),
+                        SizedBox(height: 16),
+                      ],
+                    ),
                   ),
                 ),
                 bottom: PreferredSize(

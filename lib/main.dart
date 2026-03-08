@@ -66,9 +66,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frendly/core/constants/hive_table_constant.dart';
+import 'package:frendly/core/services/socket_service.dart';
 import 'package:frendly/core/services/storage/user_session_service.dart';
 import 'package:frendly/features/auth/data/models/auth_hive_models.dart';
 import 'package:frendly/features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'package:frendly/features/search/data/models/recent_search_hive_model.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -84,7 +86,7 @@ import 'screens/onboarding_screen.dart';
 import 'features/auth/presentation/pages/login_screen.dart';
 import 'features/auth/presentation/pages/register_screen.dart';
 import 'screens/bottom_screen/home_screen.dart';
-import 'screens/bottom_navigation_screen.dart';
+// import 'screens/bottom_navigation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,9 +109,13 @@ void main() async {
   if (!Hive.isAdapterRegistered(HiveConstants.commentHiveModelTypeId)) {
     Hive.registerAdapter(CommentHiveModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(HiveConstants.recentSearchHiveModelTypeId)) {
+    Hive.registerAdapter(RecentSearchHiveModelAdapter());
+  }
 
   // Open existing auth box
   await Hive.openBox<AuthHiveModels>(HiveTableConstant.authTable);
+  await Hive.openBox<RecentSearchHiveModel>(HiveConstants.recentSearchesBox);
 
   // NEW: Open post feature boxes
   await Hive.openBox(HiveConstants.authBox);
@@ -128,11 +134,26 @@ void main() async {
   );
 }
 
-class FrendlyApp extends StatelessWidget {
+class FrendlyApp extends ConsumerWidget {
   const FrendlyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final authBox = Hive.box(HiveConstants.authBox);
+        final token = authBox.get('token');
+
+        if (token != null && token.isNotEmpty) {
+          print('🔌 Initializing Socket.IO connection...');
+          SocketService().connect();
+        } else {
+          print('⚠️ No token found, skipping socket connection');
+        }
+      } catch (e) {
+        print('❌ Error initializing socket: $e');
+      }
+    });
     return MaterialApp(
       title: 'Frendly',
       debugShowCheckedModeBanner: false,

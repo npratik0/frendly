@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frendly/features/chat/presentstion/pages/conversations_screen.dart';
 import 'package:frendly/features/profile/presentation/pages/profile_screen.dart';
+import 'package:frendly/features/search/presentation/pages/search_screen.dart';
+// import 'package:frendly/screens/bottom_screen/search_screen.dart'
+//     hide SearchScreen;
 import 'package:hive/hive.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../post/presentation/pages/home_screen.dart';
@@ -30,9 +34,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const SearchPlaceholder(),
+    // const SearchPlaceholder(),
+    const SearchScreen(),
     const CreatePostPlaceholder(),
-    const ChatPlaceholder(),
+    // const ChatPlaceholder(),
+    const ConversationsScreen(),
     // const ProfilePlaceholder(),
     ProfileScreen(userId: getCurrentUserId()),
   ];
@@ -52,24 +58,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ),
         title: Row(
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: AppConstants.primaryGradient,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.auto_awesome,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
+            // Container(
+            //   width: 32,
+            //   height: 32,
+            //   decoration: BoxDecoration(
+            //     gradient: AppConstants.primaryGradient,
+            //     borderRadius: BorderRadius.circular(8),
+            //   ),
+            //   // child: const Icon(
+            //   //   Icons.auto_awesome,
+            //   //   color: Colors.white,
+            //   //   size: 20,
+            //   // ),
+            // ),
             const SizedBox(width: 8),
             const Text(
               'Frendly',
               style: TextStyle(
-                color: Colors.black,
+                color: Color.fromARGB(255, 85, 108, 238),
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),

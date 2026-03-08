@@ -22,49 +22,48 @@ class AppDrawer extends ConsumerWidget {
           child: Column(
             children: [
               // Header
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: AppConstants.primaryGradient,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 3),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            AppConstants.defaultProfilePicture,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'John Doe',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      '@johndoe',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-
+              // Container(
+              //   padding: const EdgeInsets.all(24),
+              //   decoration: BoxDecoration(
+              //     gradient: AppConstants.primaryGradient,
+              //     borderRadius: const BorderRadius.only(
+              //       bottomLeft: Radius.circular(24),
+              //       bottomRight: Radius.circular(24),
+              //     ),
+              //   ),
+              //   child: Column(
+              //     children: [
+              //       Container(
+              //         width: 80,
+              //         height: 80,
+              //         decoration: BoxDecoration(
+              //           shape: BoxShape.circle,
+              //           border: Border.all(color: Colors.white, width: 3),
+              //           image: const DecorationImage(
+              //             image: NetworkImage(
+              //               AppConstants.defaultProfilePicture,
+              //             ),
+              //             fit: BoxFit.cover,
+              //           ),
+              //         ),
+              //       ),
+              //       const SizedBox(height: 16),
+              //       const Text(
+              //         'John Doe',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //       const SizedBox(height: 4),
+              //       const Text(
+              //         '@johndoe',
+              //         style: TextStyle(color: Colors.white70, fontSize: 14),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               const SizedBox(height: 8),
 
               // Menu Items

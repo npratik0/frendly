@@ -25,4 +25,7 @@ class HiveConstants {
   static const int commentHiveModelTypeId = 11;
   static const int userHiveModelTypeId = 2;
   static const int offlineActionTypeId = 3;
+
+  static const String recentSearchesBox = 'recent_searches_box';
+  static const int recentSearchHiveModelTypeId = 20;
 }
